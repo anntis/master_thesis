@@ -137,11 +137,13 @@ DP_weights = DP_weights_0./repmat(sum(DP_weights_0,2),1,n_eff);
 Ate = sum((M_f_nc_1-M_f_nc_0).*DP_weights,2);
 Ate_m = mean(Ate);
 Ate_low = quantile(Ate,alpha/2); Ate_up = quantile(Ate,1-alpha/2);
+bayes_std = std(Ate);
 
 % (2) Estimation of ATE with the PA Bayes (Prior Correction) method.
 Ate_pc = sum((M_f_1-M_f_0).*DP_weights,2);
 Ate_pc_m = mean(Ate_pc);
 Ate_pc_low = quantile(Ate_pc,alpha/2);Ate_pc_up = quantile(Ate_pc,1-alpha/2);
+pa_bayes_std = std(Ate_pc);
 
 % (3) Estimation of ATE with the Double Robust (DR) Bayes method.
 % This method combines the model-based estimate and the Riesz representer
@@ -151,10 +153,13 @@ DR_rec_1 = repmat(Riesz_est',N_post,1).*(repmat(Y',N_post,1)-M_f_obs);
 Ate_drb = sum((M_f_1-M_f_0).*DP_weights,2) + ATE_dr_pre - sum(DR_rec_1/n_eff,2) - sum((M_f_1-M_f_0)/n_eff,2);
 Ate_drb_m = mean(Ate_drb);
 Ate_drb_low = quantile(Ate_drb,alpha/2);Ate_drb_up = quantile(Ate_drb,1-alpha/2);
+dr_bayes_std = std(Ate_drb);
 
 % === Results ===
-disp('---------------------------------------')
-fprintf('Bayes:    mean=%.3f, CI=[%.3f, %.3f]\n', Ate_m, Ate_low, Ate_up);
-fprintf('PA Bayes: mean=%.3f, CI=[%.3f, %.3f]\n', Ate_pc_m, Ate_pc_low, Ate_pc_up);
-fprintf('DR Bayes: mean=%.3f, CI=[%.3f, %.3f]\n', Ate_drb_m, Ate_drb_low, Ate_drb_up);
-disp('---------------------------------------')
+disp('------------------------------------------------------------')
+disp('Method         Mean      Std      95% CI')
+disp('------------------------------------------------------------')
+fprintf('Bayes:       %.3f   %.3f   [%.3f, %.3f]\n', Ate_m, bayes_std, Ate_low, Ate_up);
+fprintf('PA Bayes:    %.3f   %.3f   [%.3f, %.3f]\n', Ate_pc_m, pa_bayes_std, Ate_pc_low, Ate_pc_up);
+fprintf('DR Bayes:    %.3f   %.3f   [%.3f, %.3f]\n', Ate_drb_m, dr_bayes_std, Ate_drb_low, Ate_drb_up);
+disp('------------------------------------------------------------')
