@@ -1,0 +1,6 @@
+bayes_mean=21.336
+bayes_std=4.729
+pa_bayes_mean=21.297
+pa_bayes_std=4.914
+dr_bayes_mean=21.405
+dr_bayes_std=8.080

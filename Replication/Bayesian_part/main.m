@@ -163,3 +163,24 @@ fprintf('Bayes:       %.3f   %.3f   [%.3f, %.3f]\n', Ate_m, bayes_std, Ate_low, 
 fprintf('PA Bayes:    %.3f   %.3f   [%.3f, %.3f]\n', Ate_pc_m, pa_bayes_std, Ate_pc_low, Ate_pc_up);
 fprintf('DR Bayes:    %.3f   %.3f   [%.3f, %.3f]\n', Ate_drb_m, dr_bayes_std, Ate_drb_low, Ate_drb_up);
 disp('------------------------------------------------------------')
+
+% === Save results to a file for Python ===
+% Direction to `master_thesis`
+master_thesis_dir = fullfile(fileparts(fileparts(pwd))); 
+
+% Direction to `data/obtained_data`
+results_dir = fullfile(master_thesis_dir, 'data', 'obtained_data');
+
+fname_out = fullfile(results_dir, 'Bayesian_results.txt');
+
+% Writing results to file
+fileID = fopen(fname_out, 'w');
+fprintf(fileID, 'bayes_mean=%.3f\n', Ate_m);
+fprintf(fileID, 'bayes_std=%.3f\n', bayes_std);
+fprintf(fileID, 'pa_bayes_mean=%.3f\n', Ate_pc_m);
+fprintf(fileID, 'pa_bayes_std=%.3f\n', pa_bayes_std);
+fprintf(fileID, 'dr_bayes_mean=%.3f\n', Ate_drb_m);
+fprintf(fileID, 'dr_bayes_std=%.3f\n', dr_bayes_std);
+fclose(fileID);
+
+disp(['Results saved to ' fname_out]);
