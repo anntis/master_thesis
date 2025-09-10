@@ -47,7 +47,7 @@ function [dhyp, dx] = dirder(Q,K_0,Riesz,ps,dps,hyp,x,z,dg,xeqz)
    dhyp = Q(:)'* K_0(:) * 2 * hyp; % d(tr(Q'*K))/dhyp
    dgdx = zeros(n,p); %dg/dx
    for j=1:q
-   dgdx(:,j) = ii * coef(j+1); % <-- ИСПРАВЛЕНИЕ: БЫЛО dgdx(:,q)
+   dgdx(:,j) = ii * coef(j+1); % <-- was dgdx(:,q)
    end
    dpsdx_part_1 = dps(coef(1)+x(:,1:q)*coef(2:end)); % dim: n * 1
    dpsdx = bsxfun(@times,dpsdx_part_1,dgdx); % the derivative of propensity score pi(x) w.r.t. x (covariate); dim: n * p

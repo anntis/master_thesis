@@ -37,9 +37,7 @@ likLogis = @(t) 1./(1+exp(-t));
 % Bounding function for propensity scores to ensure numerical stability.
 bd = @(t,ps_bd) min(max(t,ps_bd),1-ps_bd);
 % Boundary parameters for trimming propensity scores.
-ps_bd_cf = 0.1;
-ps_trim = 1e-5;
-ps_bd = max(ps_bd_cf, ps_trim);
+ps_bd = 0.1;
 
 % === Data Type Conversion and Preparation ===
 % The number of effective observations after trimming
@@ -70,7 +68,7 @@ hyp.cov = log([ones(1,q+1), std(Y)^2]);
 % Likelihood function for a continuous outcome (Y).
 likfunc = @likGauss;
 % Hyperparameter for the likelihood function (noise variance).
-hyp.lik = log(std(Y)/4);
+hyp.lik = log(std(Y));
 
 % === 1. Standard Bayesian Inference (Without Correction) ===
 % Minimization of the negative log marginal likelihood to find optimal hyperparameters.
